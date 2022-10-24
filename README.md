@@ -1,6 +1,12 @@
-# Getting Started with Create React App
+# What Do I Feel Like Eating?
+
+I'm indecisive of what I want to eat every day, so I developed an app which will give me an idea on what to cook and eat every day, for different meals.
+
+I used this [free food api](https://www.themealdb.com/api.php) to generate different recipes.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+This project is mainly built for me to practice a bit of Typescript, React and theming. More work to come!
 
 ## Available Scripts
 
