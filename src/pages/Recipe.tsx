@@ -83,7 +83,9 @@ const Recipe = () => {
 
         //generateIngredientList();
 
-        recipeData.meals.map((recipe: any) =>
+        const parsedData = JSON.parse(JSON.stringify(recipeData.meals));
+
+        parsedData.map((recipe: any) =>
           setRecipeData({
             id: recipe.idMeal,
             nationality: recipe.strArea,
@@ -101,8 +103,6 @@ const Recipe = () => {
     };
     fetchRecipe();
   }, [id]);
-
-  console.log(recipeData.instructions)
 
   return (
     <Flex
@@ -137,7 +137,14 @@ const Recipe = () => {
         <Badge>{recipeData.meal}</Badge>
         <Badge variant="muted">{recipeData.nationality}</Badge>
         <Container>
-          <Paragraph>{recipeData.instructions}</Paragraph>
+          <Paragraph sx={{
+            variant: 'paragraph',
+            textAlign: 'justify',
+            textAlignLast: 'start',
+            textJustify: 'auto'
+          }}>
+            1. {(recipeData.instructions).replace('\\r\\n', '')}
+          </Paragraph>
         </Container>
       </main>
     </Flex>
