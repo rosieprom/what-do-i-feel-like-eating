@@ -1,10 +1,11 @@
+/** @jsxImportSource theme-ui */
 import { Button, Card as ThemeUICard, Image, Text } from "theme-ui";
 
 export interface CardProps {
     imageSrc: string;
     imageAlt: string;
     cardText: string;
-    onClick: () => {};
+    onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
 const Card = ({ imageSrc, imageAlt, cardText, onClick}: CardProps) => {
@@ -12,11 +13,14 @@ const Card = ({ imageSrc, imageAlt, cardText, onClick}: CardProps) => {
     <ThemeUICard
       sx={{
         maxWidth: 256,
+        flexDirection: 'column'
       }}
     >
       <Image src={imageSrc} alt={imageAlt}/>
-      <Text>{cardText}</Text>
-      <Button onClick={onClick}>View Recipe</Button>
+      <div sx={{ width: '100%', marginTop: 2}}>
+        <Text>{cardText}</Text>
+      </div>
+      <Button sx={{marginTop: 2}} onClick={onClick}>View Recipe</Button>
     </ThemeUICard>
   );
 };
