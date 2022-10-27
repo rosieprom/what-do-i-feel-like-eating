@@ -9,7 +9,7 @@ const Navigation = () => {
         display: "flex",
         alignItems: "center",
         variant: "styles.header",
-        padding: 2
+        padding: 2,
       }}
     >
       <NavLink
@@ -23,22 +23,13 @@ const Navigation = () => {
       </NavLink>
       <div sx={{ mx: "auto" }} />
       <NavLink
-        to="/"
+        to="/about"
         sx={{
           variant: "styles.navlink",
           p: 2,
         }}
       >
-        About
-      </NavLink>
-      <NavLink
-        to="/"
-        sx={{
-          variant: "styles.navlink",
-          p: 2,
-        }}
-      >
-        Github
+        about
       </NavLink>
     </header>
   );

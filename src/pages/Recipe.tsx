@@ -4,7 +4,6 @@ import { useParams, useHistory } from "react-router-dom";
 import {
   Image,
   Flex,
-  Box,
   Heading,
   Button,
   Badge,
@@ -24,6 +23,7 @@ const Recipe = () => {
     thumbnail: "",
     recipeSource: "",
     youtubeLink: "",
+    drinkAlternate: "",
   });
 
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -60,7 +60,10 @@ const Recipe = () => {
             }
           }
 
-          const mergeArrays = (arr1 = [], arr2 = []) => {
+          const mergeArrays = (
+            arr1: Array<any> = [],
+            arr2: Array<any> = []
+          ) => {
             const res = arr1.reduce((acc, elem, index) => {
               acc[elem] = arr2[index];
               return acc;
@@ -68,12 +71,16 @@ const Recipe = () => {
             return res;
           };
 
-          setIngredients(mergeArrays(loopedMeasurements, loopedIngredients));
+          setIngredients(
+            mergeArrays(loopedMeasurements as any, loopedIngredients as any)
+          );
         };
 
         generateIngredientsList();
 
         const parsedData = JSON.parse(JSON.stringify(recipeData.meals));
+
+        console.log(parsedData);
 
         parsedData.map((recipe: any) =>
           setRecipeData({
@@ -85,6 +92,7 @@ const Recipe = () => {
             thumbnail: recipe.strMealThumb,
             recipeSource: recipe.strSource,
             youtubeLink: recipe.strYoutube,
+            drinkAlternate: recipe.strDrinkAlternate,
           })
         );
       } catch (error) {
@@ -93,8 +101,6 @@ const Recipe = () => {
     };
     fetchRecipe();
   }, [id]);
-
-  console.log({ ingredients });
 
   return (
     <Flex
@@ -111,7 +117,7 @@ const Recipe = () => {
         <Image
           src={recipeData.thumbnail}
           sx={{
-            height: [100, 250, 350],
+            height: [190, 220, 280],
             width: "auto",
           }}
         />
@@ -120,16 +126,18 @@ const Recipe = () => {
           sx={{
             marginTop: 2,
             display: "grid",
-            gridGap: 2,
+            gridGap: 1,
           }}
         >
-          {Object.keys(ingredients).map((key, index) => (
-            <Text key={index}>
+          {Object.keys(ingredients).map((key: any, index: any) => (
+            <Text variant="paragraph" key={index}>
               {key} {ingredients[key]}
             </Text>
           ))}
         </div>
-        <Button onClick={() => history.push("/")}>Go back</Button>
+        <Button sx={{ marginTop: 2 }} onClick={() => history.push("/")}>
+          Go back
+        </Button>
       </aside>
       <main
         sx={{
@@ -138,11 +146,20 @@ const Recipe = () => {
           minWidth: 320,
         }}
       >
-        <Heading>{recipeData.recipeTitle}</Heading>
-        <Badge>{recipeData.meal}</Badge>
-        <Badge variant="muted">{recipeData.nationality}</Badge>
-        <Container>
+        <Heading as="h1" sx={{ my: 3 }}>
+          {recipeData.recipeTitle}
+        </Heading>
+        {recipeData.meal && <Badge>{recipeData.meal}</Badge>}
+        {recipeData.nationality && (
+          <Badge variant="muted">{recipeData.nationality}</Badge>
+        )}
+        {recipeData.drinkAlternate && (
+          <Badge variant="secondary">{recipeData.drinkAlternate}</Badge>
+        )}
+
+        <Container sx={{ my: 3 }}>
           <Paragraph
+            variant="paragraph"
             sx={{
               variant: "paragraph",
               textAlign: "justify",

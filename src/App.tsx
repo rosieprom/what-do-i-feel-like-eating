@@ -3,7 +3,7 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/Navigation";
-
+import About from "./pages/About";
 import Home from "./pages/Home";
 import Recipe from "./pages/Recipe";
 
@@ -17,15 +17,20 @@ function App() {
       }}
     >
       <Navigation />
-      <main sx={{
-        mx: [5, 20, 30]
-      }}>
+      <main
+        sx={{
+          mx: [5, 20, 30],
+        }}
+      >
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
           <Route path="/recipe/:id">
             <Recipe />
+          </Route>
+          <Route exact path="/about">
+            <About />
           </Route>
         </Switch>
       </main>

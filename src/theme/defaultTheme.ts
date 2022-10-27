@@ -19,14 +19,26 @@ export const defaultTheme = makeTheme({
     heading: 1.125,
   },
   colors: {
-    text: "hsl(210, 50%, 96%)",
-    background: "hsl(230, 25%, 18%)",
-    primary: "hsl(260, 100%, 80%)",
+    text: "#000",
+    background: "#fff",
+    primary: "#CC99FF",
     secondary: "hsl(290, 100%, 80%)",
+    muted: "#f6f6f6",
     highlight: "hsl(260, 20%, 40%)",
     purple: "hsl(290, 100%, 80%)",
-    muted: "hsla(230, 20%, 0%, 20%)",
     gray: "hsl(210, 50%, 60%)",
+    modes: {
+      dark: {
+        text: "hsl(210, 50%, 96%)",
+        background: "hsl(230, 25%, 18%)",
+        primary: "hsl(260, 100%, 80%)",
+        secondary: "hsl(290, 100%, 80%)",
+        highlight: "hsl(260, 20%, 40%)",
+        purple: "hsl(290, 100%, 80%)",
+        muted: "hsla(230, 20%, 0%, 20%)",
+        gray: "hsl(210, 50%, 60%)",
+      },
+    },
   },
   text: {
     default: {
@@ -75,9 +87,9 @@ export const defaultTheme = makeTheme({
     },
     p: {
       variant: "text.paragraph",
-      fontSize: 1,
+      fontSize: 0,
       wordWrap: "break-word",
-      wordSpacing: 1.2,
+      wordSpacing: 1,
     },
     pre: {
       fontFamily: "monospace",
@@ -105,6 +117,12 @@ export const defaultTheme = makeTheme({
     },
     navlink: {
       textDecoration: "none",
+      ":hover": {
+        color: "highlight",
+      },
+      ":active": {
+        color: "highlight",
+      },
     },
   },
   cards: {
@@ -123,7 +141,7 @@ export const defaultTheme = makeTheme({
   },
   badges: {
     primary: {
-      color: "text",
+      color: "background",
       bg: "primary",
       padding: 1,
       borderRadius: 2,
@@ -131,7 +149,35 @@ export const defaultTheme = makeTheme({
     },
     muted: {
       color: "text",
+      bg: "muted",
+      padding: 1,
+      borderRadius: 2,
+      margin: 1,
+    },
+    secondary: {
+      color: "background",
       bg: "secondary",
+      padding: 1,
+      borderRadius: 2,
+      margin: 1,
+    },
+    highlight: {
+      color: "background",
+      bg: "highlight",
+      padding: 1,
+      borderRadius: 2,
+      margin: 1,
+    },
+    gray: {
+      color: "background",
+      bg: "gray",
+      padding: 1,
+      borderRadius: 2,
+      margin: 1,
+    },
+    accent: {
+      color: "background",
+      bg: "accent",
       padding: 1,
       borderRadius: 2,
       margin: 1,
@@ -148,13 +194,36 @@ export const defaultTheme = makeTheme({
       bg: "primary",
       cursor: "pointer",
       "&:hover": {
-        bg: "text",
+        bg: "highlight",
+        color: "background",
       },
     },
     secondary: {
-      color: "background",
+      color: "text",
       bg: "secondary",
       cursor: "pointer",
+      "&:hover": {
+        bg: "purple",
+        color: "background",
+      },
+    },
+  },
+  links: {
+    default: {
+      color: "accent",
+      textDecoration: "none",
+      ":hover": {
+        color: "highlight",
+        textDecoration: "underline",
+      },
+    },
+    bold: {
+      fontWeight: "bold",
+    },
+    nav: {
+      fontWeight: "bold",
+      color: "inherit",
+      textDecoration: "none",
     },
   },
   sizes: {
