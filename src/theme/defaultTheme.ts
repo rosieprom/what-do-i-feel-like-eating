@@ -4,9 +4,9 @@ export const defaultTheme = makeTheme({
   breakpoints: ["40em", "52em", "64em"],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif",
+    body: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: "inherit",
-    monospace: "Menlo, monospace"
+    monospace: "Menlo, monospace",
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
@@ -29,6 +29,14 @@ export const defaultTheme = makeTheme({
     gray: "hsl(210, 50%, 60%)",
   },
   text: {
+    default: {
+      color: "text",
+      fontSize: 3,
+    },
+    caps: {
+      textTransform: "uppercase",
+      letterSpacing: "0.2em",
+    },
     heading: {
       fontFamily: "heading",
       lineHeight: "heading",
@@ -65,6 +73,12 @@ export const defaultTheme = makeTheme({
       variant: "text.heading",
       fontSize: 0,
     },
+    p: {
+      variant: "text.paragraph",
+      fontSize: 1,
+      wordWrap: "break-word",
+      wordSpacing: 1.2,
+    },
     pre: {
       fontFamily: "monospace",
       overflowX: "auto",
@@ -90,15 +104,15 @@ export const defaultTheme = makeTheme({
       borderBottomStyle: "solid",
     },
     navlink: {
-      textDecoration: "none"
-    }
+      textDecoration: "none",
+    },
   },
   cards: {
     primary: {
       padding: 2,
       borderRadius: 4,
       boxShadow: "0 0 8px rgba(0, 0, 0, 0.125)",
-      flexDirection: "column"
+      flexDirection: "column",
     },
     compact: {
       padding: 1,
@@ -130,21 +144,21 @@ export const defaultTheme = makeTheme({
   },
   buttons: {
     primary: {
-      color: 'background',
-      bg: 'primary',
-      cursor: 'pointer',
-      '&:hover': {
-        bg: 'text',
-      }
+      color: "background",
+      bg: "primary",
+      cursor: "pointer",
+      "&:hover": {
+        bg: "text",
+      },
     },
     secondary: {
-      color: 'background',
-      bg: 'secondary',
-      cursor: 'pointer',
+      color: "background",
+      bg: "secondary",
+      cursor: "pointer",
     },
   },
   sizes: {
     sidebar: 200,
-    recipeSidebar: 400
+    recipeSidebar: 400,
   },
 });

@@ -10,11 +10,11 @@ import {
   Badge,
   Paragraph,
   Container,
+  Text,
 } from "theme-ui";
 
 const Recipe = () => {
   const { id } = useParams<{ id: string }>();
-  const [ingredientsList, setIngredientsList] = useState([]);
   const [recipeData, setRecipeData] = useState({
     id: 0,
     nationality: "",
@@ -26,6 +26,8 @@ const Recipe = () => {
     youtubeLink: "",
   });
 
+  const [ingredients, setIngredients] = useState<string[]>([]);
+
   let history = useHistory();
 
   useEffect(() => {
@@ -36,52 +38,40 @@ const Recipe = () => {
         );
         const recipeData = await recipeResponse.json();
 
-        const generateMeasurements = () => {
-          const measurements = [];
-          for (const [key, value] of Object.entries(recipeData.meals[0])) {
-            var m;
-            if (key.includes("strMeasure")) {
-              m = value as string;
-              if (m !== undefined) {
-                measurements.push(m);
-              }
-            }
-          }
-          return measurements;
-        };
+        const generateIngredientsList = () => {
+          let loopedIngredients: never | any[] = [];
+          let loopedMeasurements: never | any[] = [];
 
-        const generateIngredients = () => {
-          const ingredients = [];
           for (const [key, value] of Object.entries(recipeData.meals[0])) {
-            var i;
+            var i: string;
+            var m: string;
+
             if (key.includes("strIngredient")) {
               i = value as string;
-              if (i !== undefined) {
-                ingredients.push(i);
+              if (i) {
+                loopedIngredients.push(i);
+              }
+            }
+            if (key.includes("strMeasure")) {
+              m = value as string;
+              if (m) {
+                loopedMeasurements.push(m);
               }
             }
           }
-          return ingredients;
+
+          const mergeArrays = (arr1 = [], arr2 = []) => {
+            const res = arr1.reduce((acc, elem, index) => {
+              acc[elem] = arr2[index];
+              return acc;
+            }, {});
+            return res;
+          };
+
+          setIngredients(mergeArrays(loopedMeasurements, loopedIngredients));
         };
 
-        const generateIngredientList = () => {
-          const measurements = generateMeasurements();
-          const ingredients = generateIngredients();
-
-          const listIngredients = [] as any;
-
-          measurements.map((m) => {
-            ingredients.map((i) => {
-              listIngredients.push(`${m} ${i}`);
-            });
-          });
-
-          setIngredientsList(listIngredients);
-        };
-
-        console.log({ ingredientsList });
-
-        //generateIngredientList();
+        generateIngredientsList();
 
         const parsedData = JSON.parse(JSON.stringify(recipeData.meals));
 
@@ -104,6 +94,8 @@ const Recipe = () => {
     fetchRecipe();
   }, [id]);
 
+  console.log({ ingredients });
+
   return (
     <Flex
       sx={{
@@ -124,6 +116,19 @@ const Recipe = () => {
           }}
         />
         <Heading as="h3">Ingredients</Heading>
+        <div
+          sx={{
+            marginTop: 2,
+            display: "grid",
+            gridGap: 2,
+          }}
+        >
+          {Object.keys(ingredients).map((key, index) => (
+            <Text key={index}>
+              {key} {ingredients[key]}
+            </Text>
+          ))}
+        </div>
         <Button onClick={() => history.push("/")}>Go back</Button>
       </aside>
       <main
@@ -137,13 +142,16 @@ const Recipe = () => {
         <Badge>{recipeData.meal}</Badge>
         <Badge variant="muted">{recipeData.nationality}</Badge>
         <Container>
-          <Paragraph sx={{
-            variant: 'paragraph',
-            textAlign: 'justify',
-            textAlignLast: 'start',
-            textJustify: 'auto'
-          }}>
-            1. {(recipeData.instructions).replace('\\r\\n', '')}
+          <Paragraph
+            sx={{
+              variant: "paragraph",
+              textAlign: "justify",
+              textAlignLast: "start",
+              textJustify: "auto",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {recipeData.instructions.replace(/\\r\\n/g, "<br />")}
           </Paragraph>
         </Container>
       </main>
