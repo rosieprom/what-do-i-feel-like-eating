@@ -1,22 +1,32 @@
-import { Button, Card as ThemeUICard, Image, Text } from "theme-ui";
+/** @jsxImportSource theme-ui */
+import { Button, Card as ThemeUICard, Image, Paragraph } from "theme-ui";
 
 export interface CardProps {
-    imageSrc: string;
-    imageAlt: string;
-    cardText: string;
-    onClick: () => {};
+  imageSrc: string;
+  imageAlt: string;
+  cardText: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
-const Card = ({ imageSrc, imageAlt, cardText, onClick}: CardProps) => {
+const Card = ({ imageSrc, imageAlt, cardText, onClick }: CardProps) => {
   return (
     <ThemeUICard
       sx={{
         maxWidth: 256,
       }}
     >
-      <Image src={imageSrc} alt={imageAlt}/>
-      <Text>{cardText}</Text>
-      <Button onClick={onClick}>View Recipe</Button>
+      <Image src={imageSrc} alt={imageAlt} />
+      <div
+        sx={{
+          display: "grid",
+          gridGap: 2,
+        }}
+      >
+        <Paragraph>{cardText}</Paragraph>
+        <Button sx={{ marginTop: 2 }} onClick={onClick}>
+          View Recipe
+        </Button>
+      </div>
     </ThemeUICard>
   );
 };
