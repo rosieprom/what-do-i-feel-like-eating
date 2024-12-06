@@ -31,6 +31,15 @@ const Navigation = () => {
       >
         about
       </NavLink>
+      <NavLink
+        to="/liked-recipes"
+        sx={{
+          variant: "styles.navlink",
+          p: 2,
+        }}
+      >
+        liked recipes
+      </NavLink>
     </header>
   );
 };

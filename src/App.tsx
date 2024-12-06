@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 import About from "./pages/About";
 import Home from "./pages/Home";
 import Recipe from "./pages/Recipe";
+import LikedRecipes from "./pages/LikedRecipes";
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route exact path="/about">
             <About />
+          </Route>
+          <Route exact path="/liked-recipes">
+            <LikedRecipes />
           </Route>
         </Switch>
       </main>
