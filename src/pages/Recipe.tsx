@@ -80,8 +80,6 @@ const Recipe = () => {
 
         const parsedData = JSON.parse(JSON.stringify(recipeData.meals));
 
-        console.log(parsedData);
-
         parsedData.map((recipe: any) =>
           setRecipeData({
             id: recipe.idMeal,
@@ -135,7 +133,10 @@ const Recipe = () => {
             </Text>
           ))}
         </div>
-        <Button sx={{ marginTop: 2 }} onClick={() => history.push("/")}>
+        <Button
+          sx={{ marginTop: 2 }}
+          onClick={() => history.push("/liked-recipes")}
+        >
           Go back
         </Button>
       </aside>

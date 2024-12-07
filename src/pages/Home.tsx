@@ -10,6 +10,7 @@ import {
   Image,
   Text,
   Spinner,
+  Badge,
 } from "theme-ui";
 import { useState, useEffect } from "react";
 import { getRandomMeal, Meal } from "../api/meal-api";
@@ -65,7 +66,14 @@ const Home = () => {
           padding: 3,
         }}
       >
-        <Heading as="h1">Dinner Time</Heading>
+        <Heading
+          as="h1"
+          sx={{
+            color: "highlight",
+          }}
+        >
+          Dinner Time
+        </Heading>
         <Button onClick={decideDinner} disabled={loading}>
           {loading ? "Loading..." : "Decide Dinner"}
         </Button>
@@ -109,6 +117,8 @@ const Home = () => {
             >
               {dinner.strMeal}
             </Heading>
+            <Badge>{dinner.strMeal}</Badge>
+            <Badge variant="muted">{dinner.strArea}</Badge>
             <Paragraph
               sx={{
                 marginBottom: 2,
@@ -124,7 +134,7 @@ const Home = () => {
                 color: "secondary",
               }}
             >
-              Meal saved to liked recipes!
+              Liked! 🎉
             </Text>
           )}
           <Flex

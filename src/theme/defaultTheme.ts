@@ -116,12 +116,13 @@ export const defaultTheme = makeTheme({
       borderBottomStyle: "solid",
     },
     navlink: {
+      color: "highlight",
       textDecoration: "none",
       ":hover": {
-        color: "highlight",
+        color: "secondary",
       },
       ":active": {
-        color: "highlight",
+        color: "secondary",
       },
     },
   },

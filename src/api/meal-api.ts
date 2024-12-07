@@ -1,8 +1,12 @@
 export interface Meal {
   idMeal: string;
   strMeal: string;
+  strArea: string;
+  strCategory: string;
   strMealThumb: string;
   strInstructions: string;
+  strTags: string;
+  strYoutube: string;
 }
 
 export async function getRandomMeal(): Promise<Meal> {
