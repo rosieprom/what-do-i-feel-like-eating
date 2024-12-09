@@ -26,11 +26,23 @@ const About = () => {
         >
           About
         </Heading>
-        <Paragraph>
+        <Paragraph
+          sx={{
+            variant: "paragraph",
+            color: "text",
+            my: 2,
+          }}
+        >
           Hi there, this was a website built so that it would be easier for you
           to find what to eat.
         </Paragraph>
-        <Paragraph>
+        <Paragraph
+          sx={{
+            variant: "paragraph",
+            color: "text",
+            my: 2,
+          }}
+        >
           This project was made using{" "}
           <Link
             variant="default"
@@ -43,10 +55,15 @@ const About = () => {
           </Link>{" "}
           which is a free API service that lets you load up different meals.
         </Paragraph>
-        <Paragraph>
-          This was a fun side project so I can sharpen my skills as a software
-          developer. The tech I used: React, Typescript and AWS Amplify. You can
-          view the source code{" "}
+        <Paragraph
+          sx={{
+            variant: "paragraph",
+            color: "text",
+            my: 2,
+          }}
+        >
+          The tech I used: NextJS, React, Typescript, ThemeUI and AWS Amplify.
+          You can view the source code{" "}
           <Link
             variant="default"
             sx={{

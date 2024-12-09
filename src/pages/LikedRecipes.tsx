@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import { Heading, Grid, Paragraph } from "theme-ui";
+import { Container, Heading, Grid, Paragraph } from "theme-ui";
 import { useEffect, useState } from "react";
 import { Meal } from "../api/meal-api";
 import { getLikedMeals } from "../utils/localStorage";
@@ -13,15 +13,28 @@ const LikedRecipes = () => {
   }, []);
 
   return (
-    <main
+    <Container
       sx={{
         width: "100%",
         flex: "1 1 auto",
       }}
     >
-      <Heading>Liked Recipes</Heading>
-      <Paragraph>
-        These are your favourite recipes that you have liked.
+      <Heading
+        as="h1"
+        sx={{
+          color: "text",
+          my: [2, 3],
+        }}
+      >
+        Liked Recipes
+      </Heading>
+      <Paragraph
+        sx={{
+          color: "text",
+          my: [2, 3],
+        }}
+      >
+        These are your favourite recipes
       </Paragraph>
       {likedMeals.length === 0 && (
         <Paragraph>
@@ -30,7 +43,14 @@ const LikedRecipes = () => {
         </Paragraph>
       )}
 
-      <Grid gap={2} columns={[2, 4, 6]}>
+      <Grid
+        gap={[4, 3]}
+        columns={[1, 4, 6]}
+        sx={{
+          width: "100%",
+          justifyItems: "center",
+        }}
+      >
         {likedMeals.map((meal) => (
           <Card
             key={meal.idMeal}
@@ -41,7 +61,7 @@ const LikedRecipes = () => {
           />
         ))}
       </Grid>
-    </main>
+    </Container>
   );
 };
 

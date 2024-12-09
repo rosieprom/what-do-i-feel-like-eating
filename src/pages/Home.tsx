@@ -37,6 +37,12 @@ const Home = () => {
     if (dinner) {
       saveLikedMeal(dinner);
       setConfirmation(true);
+      setLoading(true);
+      setTimeout(() => {
+        setConfirmation(false);
+        decideDinner();
+        setLoading(false);
+      }, 1000); // 2 seconds delay
     }
   };
 
@@ -55,7 +61,6 @@ const Home = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
       }}
     >
       <Grid
@@ -69,11 +74,20 @@ const Home = () => {
         <Heading
           as="h1"
           sx={{
-            color: "highlight",
+            color: "text",
           }}
         >
           Dinner Time
         </Heading>
+        {confirmation && (
+          <Text
+            sx={{
+              color: "secondary",
+            }}
+          >
+            Successfully added to Liked Recipes! 🎉
+          </Text>
+        )}
         <Button onClick={decideDinner} disabled={loading}>
           {loading ? "Loading..." : "Decide Dinner"}
         </Button>
@@ -88,7 +102,8 @@ const Home = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            border: "1px solid black",
+            border: "1px solid",
+            borderColor: "gray",
             padding: 3,
             borderRadius: 4,
             maxWidth: 800,
@@ -103,47 +118,49 @@ const Home = () => {
           />
           <div
             sx={{
-              mx: "auto",
-              px: 3,
-              py: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
             }}
           >
             <Heading
               as="h2"
               sx={{
+                marginTop: 4,
                 marginBottom: 2,
                 textAlign: "center",
+                color: "text",
               }}
             >
               {dinner.strMeal}
             </Heading>
-            <Badge>{dinner.strMeal}</Badge>
-            <Badge variant="muted">{dinner.strArea}</Badge>
-            <Paragraph
-              sx={{
-                marginBottom: 2,
-              }}
-            >
-              Instructions:
-            </Paragraph>
-            <Paragraph>{dinner.strInstructions}</Paragraph>
+            <Flex>
+              <Badge variant="purple">{dinner.strCategory}</Badge>
+              <Badge variant="pink">{dinner.strArea}</Badge>
+              {dinner.strTags &&
+                dinner.strTags.split(",").map((tag, index) => (
+                  <Badge
+                    variant={
+                      ["green", "red", "orange", "blue", "yellow"][index % 5]
+                    }
+                    key={tag}
+                  >
+                    {tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()}
+                  </Badge>
+                ))}
+            </Flex>
           </div>
-          {confirmation && (
-            <Text
-              sx={{
-                color: "secondary",
-              }}
-            >
-              Liked! 🎉
-            </Text>
-          )}
           <Flex
             sx={{
               marginTop: 2,
               gap: 2,
             }}
           >
-            <Button onClick={handleLike}>Like</Button>
+            <Button onClick={handleLike}>
+              {loading ? "Loading..." : "Like"}
+            </Button>
             <Button onClick={handleDislike} disabled={confirmation}>
               Dislike
             </Button>

@@ -2,178 +2,215 @@
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import {
+  Container,
   Image,
   Flex,
   Heading,
   Button,
   Badge,
   Paragraph,
-  Container,
   Text,
+  Spinner,
 } from "theme-ui";
+import { getMealById, Meal } from "../api/meal-api";
 
 const Recipe = () => {
   const { id } = useParams<{ id: string }>();
-  const [recipeData, setRecipeData] = useState({
-    id: 0,
-    nationality: "",
-    meal: "",
-    recipeTitle: "",
-    instructions: "",
-    thumbnail: "",
-    recipeSource: "",
-    youtubeLink: "",
-    drinkAlternate: "",
-  });
-
+  const [dinner, setDinner] = useState<Meal | null>(null);
   const [ingredients, setIngredients] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   let history = useHistory();
 
+  const getRecipe = async () => {
+    setLoading(true);
+    try {
+      const meal = await getMealById(id);
+      setDinner(meal);
+      const ingredients = Object.entries(meal)
+        .filter(
+          ([key, value]) =>
+            key.startsWith("strIngredient") && value !== "" && value !== null
+        )
+        .map(([key, value]) => value);
+      const measurements = Object.entries(meal)
+        .filter(
+          ([key, value]) =>
+            key.startsWith("strMeasure") && value !== "" && value !== null
+        )
+        .map(([key, value]) => value);
+
+      // Merge measurements to match ingredients in order
+      const ingredientList = ingredients.map(
+        (ingredient, index) => `${measurements[index]} of ${ingredient}`
+      );
+
+      setIngredients(ingredientList);
+    } catch (error) {
+      console.error("Failed to fetch meal:", error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchRecipe = async () => {
-      try {
-        const recipeResponse = await fetch(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
-        );
-        const recipeData = await recipeResponse.json();
-
-        const generateIngredientsList = () => {
-          let loopedIngredients: never | any[] = [];
-          let loopedMeasurements: never | any[] = [];
-
-          for (const [key, value] of Object.entries(recipeData.meals[0])) {
-            var i: string;
-            var m: string;
-
-            if (key.includes("strIngredient")) {
-              i = value as string;
-              if (i) {
-                loopedIngredients.push(i);
-              }
-            }
-            if (key.includes("strMeasure")) {
-              m = value as string;
-              if (m) {
-                loopedMeasurements.push(m);
-              }
-            }
-          }
-
-          const mergeArrays = (
-            arr1: Array<any> = [],
-            arr2: Array<any> = []
-          ) => {
-            const res = arr1.reduce((acc, elem, index) => {
-              acc[elem] = arr2[index];
-              return acc;
-            }, {});
-            return res;
-          };
-
-          setIngredients(
-            mergeArrays(loopedMeasurements as any, loopedIngredients as any)
-          );
-        };
-
-        generateIngredientsList();
-
-        const parsedData = JSON.parse(JSON.stringify(recipeData.meals));
-
-        parsedData.map((recipe: any) =>
-          setRecipeData({
-            id: recipe.idMeal,
-            nationality: recipe.strArea,
-            meal: recipe.strCategory,
-            recipeTitle: recipe.strMeal,
-            instructions: recipe.strInstructions,
-            thumbnail: recipe.strMealThumb,
-            recipeSource: recipe.strSource,
-            youtubeLink: recipe.strYoutube,
-            drinkAlternate: recipe.strDrinkAlternate,
-          })
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchRecipe();
-  }, [id]);
+    getRecipe();
+  }, []);
 
   return (
-    <Flex
+    <Container
       sx={{
-        minHeight: "100vh",
+        alignItems: "stretch",
+        flex: 1,
       }}
     >
-      <aside
-        sx={{
-          flexGrow: 1,
-          flexBasis: "recipeSidebar",
-        }}
-      >
-        <Image
-          src={recipeData.thumbnail}
+      {dinner && !loading ? (
+        <Flex
           sx={{
-            height: [190, 220, 280],
-            width: "auto",
-          }}
-        />
-        <Heading as="h3">Ingredients</Heading>
-        <div
-          sx={{
-            marginTop: 2,
-            display: "grid",
-            gridGap: 1,
+            flexDirection: ["column", "row"],
+            gap: 4,
+            alignItems: "stretch",
           }}
         >
-          {Object.keys(ingredients).map((key: any, index: any) => (
-            <Text variant="paragraph" key={index}>
-              {key} {ingredients[key]}
-            </Text>
-          ))}
-        </div>
-        <Button
-          sx={{ marginTop: 2 }}
-          onClick={() => history.push("/liked-recipes")}
-        >
-          Go back
-        </Button>
-      </aside>
-      <main
-        sx={{
-          flexGrow: 99999,
-          flexBasis: 0,
-          minWidth: 320,
-        }}
-      >
-        <Heading as="h1" sx={{ my: 3 }}>
-          {recipeData.recipeTitle}
-        </Heading>
-        {recipeData.meal && <Badge>{recipeData.meal}</Badge>}
-        {recipeData.nationality && (
-          <Badge variant="muted">{recipeData.nationality}</Badge>
-        )}
-        {recipeData.drinkAlternate && (
-          <Badge variant="secondary">{recipeData.drinkAlternate}</Badge>
-        )}
-
-        <Container sx={{ my: 3 }}>
-          <Paragraph
-            variant="paragraph"
+          <aside
             sx={{
-              variant: "paragraph",
-              textAlign: "justify",
-              textAlignLast: "start",
-              textJustify: "auto",
-              whiteSpace: "pre-wrap",
+              flexGrow: 1,
+              flexBasis: "recipeSidebar",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: ["center", "flex-start"],
             }}
           >
-            {recipeData.instructions.replace(/\\r\\n/g, "<br />")}
-          </Paragraph>
-        </Container>
-      </main>
-    </Flex>
+            <Heading
+              as="h1"
+              sx={{
+                my: 3,
+                color: "text",
+                display: ["block", "none", "none"],
+              }}
+            >
+              {dinner.strMeal}
+            </Heading>
+            <Image
+              src={dinner.strMealThumb}
+              alt={dinner.strMeal}
+              sx={{
+                height: [200, 220, 280],
+                width: "auto",
+                m: 2,
+              }}
+            />
+            <Heading
+              as="h3"
+              sx={{
+                color: "text",
+              }}
+            >
+              Ingredients
+            </Heading>
+            <div
+              sx={{
+                marginTop: 2,
+                display: "grid",
+                gridGap: 1,
+                textAlign: ["center", "left", "left"],
+              }}
+            >
+              {Object.keys(ingredients).map((key: any, index: any) => (
+                <Text variant="paragraph" key={index}>
+                  {ingredients[key]}
+                </Text>
+              ))}
+            </div>
+            <Button
+              sx={{ marginTop: 2 }}
+              onClick={() => history.push("/liked-recipes")}
+            >
+              Go back
+            </Button>
+          </aside>
+          <main
+            sx={{
+              flexGrow: 99999,
+              flexBasis: 0,
+              minWidth: 320,
+            }}
+          >
+            <Heading
+              as="h1"
+              sx={{
+                my: 3,
+                color: "text",
+                display: ["none", "block", "block"],
+              }}
+            >
+              {dinner.strMeal}
+            </Heading>
+            <Flex
+              sx={{
+                gap: 2,
+                flexWrap: "wrap",
+                justifyContent: ["center", "flex-start"],
+              }}
+            >
+              {dinner.strCategory && (
+                <Badge variant="blue">{dinner.strCategory}</Badge>
+              )}
+              {dinner.strArea && <Badge variant="pink">{dinner.strArea}</Badge>}
+              {dinner.strDrinkAlternate && (
+                <Badge variant="green">{dinner.strDrinkAlternate}</Badge>
+              )}
+              {dinner.strTags &&
+                dinner.strTags.split(",").map((tag, index) => (
+                  <Badge
+                    variant={
+                      ["green", "red", "orange", "blue", "yellow"][index % 5]
+                    }
+                    key={tag}
+                  >
+                    {tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()}
+                  </Badge>
+                ))}
+            </Flex>
+
+            <Container sx={{ my: 3 }}>
+              <Paragraph
+                variant="paragraph"
+                sx={{
+                  variant: "paragraph",
+                  textAlign: "justify",
+                  textAlignLast: "start",
+                  textJustify: "auto",
+                  whiteSpace: "pre-wrap",
+                  color: "text",
+                }}
+              >
+                {dinner.strInstructions}
+              </Paragraph>
+            </Container>
+          </main>
+        </Flex>
+      ) : (
+        <Flex
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: 2,
+            minHeight: "100%",
+          }}
+        >
+          <Spinner />
+          <Heading
+            as="h3"
+            sx={{
+              color: "text",
+            }}
+          >
+            Loading the recipe
+          </Heading>
+        </Flex>
+      )}
+    </Container>
   );
 };
 
