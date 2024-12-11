@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Image,
@@ -20,7 +20,11 @@ const Recipe = () => {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  let history = useHistory();
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    navigate("/liked-recipes");
+  };
 
   const getRecipe = async () => {
     setLoading(true);
@@ -121,10 +125,7 @@ const Recipe = () => {
                 </Text>
               ))}
             </div>
-            <Button
-              sx={{ marginTop: 2 }}
-              onClick={() => history.push("/liked-recipes")}
-            >
+            <Button sx={{ marginTop: 2 }} onClick={handleNavigation}>
               Go back
             </Button>
           </aside>
