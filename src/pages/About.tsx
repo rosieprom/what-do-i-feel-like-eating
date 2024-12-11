@@ -62,8 +62,8 @@ const About = () => {
             my: 2,
           }}
         >
-          The tech I used: NextJS, React, Typescript, ThemeUI and AWS Amplify.
-          You can view the source code{" "}
+          The tech I used: React, Typescript, ThemeUI and AWS Amplify. You can
+          view the source code{" "}
           <Link
             variant="default"
             sx={{

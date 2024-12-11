@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/Navigation";
 import About from "./pages/About";
@@ -27,20 +27,12 @@ function App() {
           display: "flex",
         }}
       >
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/recipe/:id">
-            <Recipe />
-          </Route>
-          <Route exact path="/about">
-            <About />
-          </Route>
-          <Route exact path="/liked-recipes">
-            <LikedRecipes />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recipe/:id" element={<Recipe />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/liked-recipes" element={<LikedRecipes />} />
+        </Routes>
       </main>
       <Footer />
     </Container>
