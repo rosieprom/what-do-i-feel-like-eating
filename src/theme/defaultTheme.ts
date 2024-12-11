@@ -209,12 +209,30 @@ export const defaultTheme = makeTheme({
       },
     },
     secondary: {
-      color: "text",
+      color: "#5539BC",
+      bg: "muted",
+      cursor: "pointer",
+      "&:hover": {
+        bg: "#F7F5FB",
+        color: "mute",
+      },
+    },
+    tertiary: {
+      color: "#BC47A3",
+      bg: "#FEEBFE",
+      cursor: "pointer",
+      "&:hover": {
+        bg: "#FAF4FA",
+        color: "#BC47A3",
+      },
+    },
+    destruction: {
+      color: "#fff",
       bg: "secondary",
       cursor: "pointer",
       "&:hover": {
-        bg: "purple",
-        color: "background",
+        bg: "#F5164F",
+        color: "#fff",
       },
     },
   },

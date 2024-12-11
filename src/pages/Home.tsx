@@ -1,27 +1,16 @@
 /** @jsxImportSource theme-ui */
-import {
-  Button,
-  Box,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Paragraph,
-  Image,
-  Text,
-  Spinner,
-  Badge,
-} from "theme-ui";
-import { useState, useEffect } from "react";
+import { Button, Container, Grid, Heading, Paragraph, Text } from "theme-ui";
+import { useCallback, useState } from "react";
 import { getRandomMeal, Meal } from "../api/meal-api";
 import { saveLikedMeal } from "../utils/localStorage";
+import MealDisplay from "../components/MealSelector";
 
 const Home = () => {
   const [dinner, setDinner] = useState<Meal | null>(null);
   const [loading, setLoading] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
 
-  const decideDinner = async () => {
+  const decideDinner = useCallback(async () => {
     setConfirmation(false);
     setLoading(true);
     try {
@@ -31,28 +20,19 @@ const Home = () => {
       console.error("Failed to fetch meal:", error);
     }
     setLoading(false);
-  };
+  }, []);
 
-  const handleLike = () => {
+  const handleLike = useCallback(() => {
     if (dinner) {
       saveLikedMeal(dinner);
       setConfirmation(true);
-      setLoading(true);
-      setTimeout(() => {
-        setConfirmation(false);
-        decideDinner();
-        setLoading(false);
-      }, 1000); // 2 seconds delay
+      decideDinner();
     }
-  };
+  }, [dinner, decideDinner]);
 
-  const handleDislike = () => {
+  const handleDislike = useCallback(() => {
     decideDinner();
-  };
-
-  useEffect(() => {
-    decideDinner();
-  }, []);
+  }, [decideDinner]);
 
   return (
     <Container
@@ -61,6 +41,9 @@ const Home = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        width: "100%",
+        flex: "1 1 auto",
+        margin: [2, 4],
       }}
     >
       <Grid
@@ -75,9 +58,10 @@ const Home = () => {
           as="h1"
           sx={{
             color: "text",
+            textAlign: "center",
           }}
         >
-          Dinner Time
+          What do I feel like eating?
         </Heading>
         {confirmation && (
           <Text
@@ -89,85 +73,26 @@ const Home = () => {
           </Text>
         )}
         <Button onClick={decideDinner} disabled={loading}>
-          {loading ? "Loading..." : "Decide Dinner"}
+          {loading ? "Loading..." : "Decide for me!"}
         </Button>
       </Grid>
-
-      {loading ? (
-        <Spinner />
-      ) : dinner ? (
-        <Box
+      {dinner ? (
+        <MealDisplay
+          meal={dinner}
+          onLike={handleLike}
+          onDislike={handleDislike}
+          loading={loading}
+        />
+      ) : (
+        <Paragraph
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            border: "1px solid",
-            borderColor: "gray",
-            padding: 3,
-            borderRadius: 4,
-            maxWidth: 800,
+            color: "primary",
+            fontSize: 3,
+            fontWeight: "medium",
           }}
         >
-          <Image
-            src={dinner.strMealThumb}
-            alt={dinner.strMeal}
-            width={300}
-            height={200}
-            className="rounded-md shadow-md"
-          />
-          <div
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 2,
-            }}
-          >
-            <Heading
-              as="h2"
-              sx={{
-                marginTop: 4,
-                marginBottom: 2,
-                textAlign: "center",
-                color: "text",
-              }}
-            >
-              {dinner.strMeal}
-            </Heading>
-            <Flex>
-              <Badge variant="purple">{dinner.strCategory}</Badge>
-              <Badge variant="pink">{dinner.strArea}</Badge>
-              {dinner.strTags &&
-                dinner.strTags.split(",").map((tag, index) => (
-                  <Badge
-                    variant={
-                      ["green", "red", "orange", "blue", "yellow"][index % 5]
-                    }
-                    key={tag}
-                  >
-                    {tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()}
-                  </Badge>
-                ))}
-            </Flex>
-          </div>
-          <Flex
-            sx={{
-              marginTop: 2,
-              gap: 2,
-            }}
-          >
-            <Button onClick={handleLike}>
-              {loading ? "Loading..." : "Like"}
-            </Button>
-            <Button onClick={handleDislike} disabled={confirmation}>
-              Dislike
-            </Button>
-          </Flex>
-        </Box>
-      ) : (
-        <Paragraph>Click the button to get some dinner suggestions!</Paragraph>
+          Click the button to get some meal suggestions
+        </Paragraph>
       )}
     </Container>
   );

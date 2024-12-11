@@ -24,7 +24,7 @@ const About = () => {
             color: "primary",
           }}
         >
-          About
+          About wdifle
         </Heading>
         <Paragraph
           sx={{
@@ -74,6 +74,15 @@ const About = () => {
             here
           </Link>
           .
+        </Paragraph>
+        <Paragraph
+          sx={{
+            variant: "paragraph",
+            color: "text",
+            my: 2,
+          }}
+        >
+          Oh, and wdifle is <b>What Do I Feel Like Eating 😄</b>
         </Paragraph>
       </Container>
     </main>
